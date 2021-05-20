@@ -416,21 +416,23 @@ class P4RuntimeSwitch(P4Switch):
 
     def insertTableEntry(self, entry=None,
                         table_name=None, match_fields=None, action_name=None,
-                        default_action=None, action_params=None, priority=None):
+                        default_action=None, action_params=None, meter_config=None, priority=None):
         if entry is not None:
             table_name = entry['table_name']
             match_fields = entry.get('match_fields') # None if not found
             action_name = entry['action_name']
             default_action = entry.get('default_action') # None if not found
             action_params = entry['action_params']
+            meter_config = entry.get('meter_config')  # None if not found
             priority = entry.get('priority')  # None if not found
-
+            
         table_entry = self.p4info_helper.buildTableEntry(
             table_name=table_name,
             match_fields=match_fields,
             default_action=default_action,
             action_name=action_name,
             action_params=action_params,
+            meter_config=meter_config,
             priority=priority)
         try:
             self.sw_conn.WriteTableEntry(table_entry)
@@ -439,13 +441,14 @@ class P4RuntimeSwitch(P4Switch):
 
     def removeTableEntry(self, entry=None,
                         table_name=None, match_fields=None, action_name=None,
-                        default_action=None, action_params=None, priority=None):
+                        default_action=None, action_params=None, meter_config=None, priority=None):
         if entry is not None:
             table_name = entry['table_name']
             match_fields = entry.get('match_fields') # None if not found
             action_name = entry['action_name']
             default_action = entry.get('default_action') # None if not found
             action_params = entry['action_params']
+            meter_config = entry.get('meter_config')  # None if not found
             priority = entry.get('priority')  # None if not found
 
         table_entry = self.p4info_helper.buildTableEntry(
@@ -454,6 +457,7 @@ class P4RuntimeSwitch(P4Switch):
             default_action=default_action,
             action_name=action_name,
             action_params=action_params,
+            meter_config=meter_config,
             priority=priority)
         try:
             self.sw_conn.DeleteTableEntry(table_entry)

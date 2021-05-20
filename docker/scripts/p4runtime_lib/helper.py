@@ -184,12 +184,20 @@ class P4InfoHelper(object):
                         default_action=False,
                         action_name=None,
                         action_params=None,
+                        meter_config=None,
                         priority=None):
         table_entry = p4runtime_pb2.TableEntry()
         table_entry.table_id = self.get_tables_id(table_name)
 
         if priority is not None:
             table_entry.priority = priority
+
+        if meter_config is not None:
+            cir, cburst, pir, pburst = meter_config
+            table_entry.meter_config.cir = cir
+            table_entry.meter_config.cburst = cburst
+            table_entry.meter_config.pir = pir
+            table_entry.meter_config.pburst = pburst
 
         if match_fields:
             table_entry.match.extend([
